@@ -13,6 +13,8 @@ import sys
 from pathlib import Path
 import pandas as pd
 
+from security import detect_prompt_injection
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -117,9 +119,29 @@ def main():
         print("\n--- 5. TOP APP VERSIONS ---")
         print(top_versions.to_string())
 
-    if "developer_response" in df_raw.columns and total_raw > 0:
-        has_reply = df_raw["developer_response"].fillna("").str.strip().ne("").sum()
-        print(f"\nDeveloper response count: {has_reply} ({has_reply / total_raw * 100:.1f}%)")
+    # Prompt Injection & Security Audit
+    print("\n--- 6. PROMPT INJECTION & SECURITY AUDIT ---")
+    flagged_reviews = []
+    for idx, row in df_raw.iterrows():
+        text = str(row.get("review_text", ""))
+        matches = detect_prompt_injection(text)
+        if matches:
+            flagged_reviews.append({
+                "review_id": str(row.get("review_id", f"row_{idx}")),
+                "rating": row.get("rating"),
+                "matches": matches,
+                "snippet": text[:80],
+            })
+
+    print(f"Total reviews audited for prompt injection: {total_raw}")
+    if flagged_reviews:
+        print(f"⚠️  Flagged {len(flagged_reviews)} reviews with potential prompt injection signatures:")
+        for item in flagged_reviews[:5]:
+            print(f"   - [{item['review_id']}] (rating: {item['rating']}): {item['matches']} -> \"{item['snippet']}...\"")
+        if len(flagged_reviews) > 5:
+            print(f"   ... and {len(flagged_reviews) - 5} more.")
+    else:
+        print("✅ 0 prompt injection attempts or adversarial directives detected in dataset.")
 
     # --- CLEANSING PHASE ---
     print("\n" + "=" * 60)
