@@ -1,0 +1,244 @@
+{
+  "taxonomy_version": "1.0.0",
+  "source_review_count": 200,
+  "categories": [
+    {
+      "category_id": "NULL_REVIEWS",
+      "name": "Null Reviews",
+      "definition": "Reviews that lack specific complaints, technical details, or operational context, providing only generic sentiment, brief praise, or uninformative criticism.",
+      "include_when": [
+        "Review consists solely of short generic criticisms or praise (e.g., 'worst app', 'bad', 'waste', 'good app')",
+        "Review contains gibberish, single words, or ratings-only sentiment without actionable detail"
+      ],
+      "exclude_when": [
+        "Review mentions a specific feature, bug, error message, UI element, or transport operational problem"
+      ],
+      "example_phrases": [
+        "worst app",
+        "bad",
+        "bekar",
+        "waste",
+        "rubbish app",
+        "worst experience ever",
+        "good app",
+        "bhot bekar hai"
+      ],
+      "boundary_notes": "Reserved strictly for non-actionable reviews where no specific technical or service root cause is identifiable."
+    },
+    {
+      "category_id": "AUTHENTICATION_AND_OTP_ISSUES",
+      "name": "Authentication and OTP Issues",
+      "definition": "Problems related to logging in, receiving one-time passwords across communication channels, or retaining login sessions.",
+      "include_when": [
+        "Failure or delay in receiving OTP via SMS, email, or WhatsApp for login or verification",
+        "User is unable to log in, verify credentials, or complete account sign-in",
+        "App repeatedly and unexpectedly logs the user out, requiring repeated re-authentication"
+      ],
+      "exclude_when": [
+        "UI overlay issues where an in-ride OTP is obscured by a seatbelt safety modal",
+        "App crashing or closing before the login screen is displayed"
+      ],
+      "example_phrases": [
+        "app is not sending otp",
+        "not receiving the OTP",
+        "unable to login",
+        "it logs out every time",
+        "Both Mobile Otp and Email OTP options are not working",
+        "every time it requires login"
+      ],
+      "boundary_notes": "Focuses on credential verification and session persistence; in-transit OTP display bugs belong to UI_FRICTION_AND_MANDATORY_PROMPTS."
+    },
+    {
+      "category_id": "APP_CRASHES_AND_LAUNCH_FAILURES",
+      "name": "App Crashes and Launch Failures",
+      "definition": "Technical stability failures where the app unexpectedly terminates, fails to start, displays a blank screen, or fails on specific phone hardware or OS versions.",
+      "include_when": [
+        "App closes immediately upon opening or crashes back to phone home screen",
+        "App hangs on startup with a blank screen",
+        "App fails to function after an update or due to OS compatibility (e.g., Android 17, Pixel, OnePlus)"
+      ],
+      "exclude_when": [
+        "App displays the explicit security error stating it was not downloaded from Play Store",
+        "App freezes specifically inside a booking workflow or map view while otherwise operational"
+      ],
+      "example_phrases": [
+        "Unable to open the app on my phone",
+        "closes as soon as I try to open",
+        "open and close automatically",
+        "app crashed did not open",
+        "just keeps giving a blank screen everytime i try to open it",
+        "auto updates itself and then the app does not launch"
+      ],
+      "boundary_notes": "Covers hard crashes and complete launch failures; recurring Play Store installation source verification dialogs are isolated under PLAY_STORE_VERIFICATION_ERROR."
+    },
+    {
+      "category_id": "PLAY_STORE_VERIFICATION_ERROR",
+      "name": "Play Store Verification Error",
+      "definition": "A specific recurring app blocker where the app falsely claims it was not installed from Google Play Store, forcing users to reinstall.",
+      "include_when": [
+        "App blocks launch with an error dialog stating it was not installed/downloaded from the Play Store",
+        "User is forced into recurring cycles of uninstalling and reinstalling due to store verification errors"
+      ],
+      "exclude_when": [
+        "General app crashes that display no specific store verification message",
+        "General download or update failures directly inside the Play Store client"
+      ],
+      "example_phrases": [
+        "move in synch application can not be installed/opened as it was not downloaded from play store",
+        "shows unable to open as the app was not downloaded from play store",
+        "showing not installed from play store",
+        "in last 3 weeks I uninstall an installed it for 10 times due to the same error"
+      ],
+      "boundary_notes": "Separated from general crashes due to its unique recurring signature and root symptom affecting Play Store package verification."
+    },
+    {
+      "category_id": "LIVE_TRACKING_AND_ETA_INACCURACY",
+      "name": "Live Tracking and ETA Inaccuracy",
+      "definition": "Flaws in real-time vehicle map tracking, delayed GPS telemetry, and inaccurate or erratic estimated time of arrival calculations.",
+      "include_when": [
+        "Vehicle GPS pin on the map freezes, lags by minutes, or shows outdated locations",
+        "Driver arrives without advance map tracking updates or tracking suddenly appears unannounced",
+        "ETA calculation fluctuates wildly (e.g., changes from 5 minutes to 30 minutes) or is vastly inaccurate"
+      ],
+      "exclude_when": [
+        "Vehicle arrives late due to traffic or driver dispatch delay rather than telemetry/ETA error",
+        "Cab routing algorithm schedules an inefficient or circuitous route"
+      ],
+      "example_phrases": [
+        "Cab Tracker is useless",
+        "ETA calculator very bad",
+        "doesn't give realtime continuous update on maps",
+        "location shows one or two hours ago",
+        "suddenly it shows up at your location",
+        "Driver arrival shows in 5mins when we leave home changes to 30mins"
+      ],
+      "boundary_notes": "Covers digital telemetry and tracking displays; the physical travel trajectory decided by dispatch belongs to ROUTING_AND_PASSENGER_POOLING."
+    },
+    {
+      "category_id": "ROUTING_AND_PASSENGER_POOLING",
+      "name": "Routing and Passenger Pooling",
+      "definition": "Inefficient automated commute routing, illogical pooling of employees from distant localities into one cab, and unreasonable schedule pickup times.",
+      "include_when": [
+        "System combines passengers traveling to or from opposing directions or different states",
+        "Assigned trip route takes significantly longer than standard transit time (e.g., 2+ hours for a 40-minute drive)",
+        "Pickups are scheduled with staggered waiting delays for colleagues in the same building",
+        "Pickup time is scheduled excessively early relative to shift timing"
+      ],
+      "exclude_when": [
+        "Driver takes an unauthorized physical shortcut or gets lost on the road",
+        "Live vehicle tracking fails to update on the map screen"
+      ],
+      "example_phrases": [
+        "MoveOutSync doesn't plan commutes it plans cross-country pilgrimages",
+        "routing algorithm clubs passengers from two different states",
+        "picks the wrong and longer route",
+        "club people in a single cab where people are not from the same route",
+        "my house is 40min from office it take 2.5 hours",
+        "why pick up time too early"
+      ],
+      "boundary_notes": "Addresses backend dispatch optimization, co-rider pooling, and travel duration algorithms rather than live tracking telemetry."
+    },
+    {
+      "category_id": "BOOKING_AND_ROSTER_MANAGEMENT",
+      "name": "Booking and Roster Management",
+      "definition": "Inability to book, schedule, modify, or cancel employee commutes, shuttles, metro passes, or work desks within the app interface.",
+      "include_when": [
+        "App fails or freezes when attempting to book or schedule pick-up and drop rides",
+        "Missing or malfunctioning option to cancel a roster schedule or ad-hoc ride",
+        "Inability to edit pickup/drop address or addresses mismatching map coordinates",
+        "Failures in auxiliary booking modules such as metro QR tickets, shuttles, or seat allocations"
+      ],
+      "exclude_when": [
+        "User cannot log in or authenticate to access the booking screen",
+        "Ride was cancelled externally by vendor or flagged as No Show by driver"
+      ],
+      "example_phrases": [
+        "unable to schedule pathetic",
+        "not able to book cab",
+        "there is no option for cancel roster",
+        "can't change address",
+        "Barely works for metro bookings",
+        "unable to book a shuttle",
+        "seat number gets removed for bookings"
+      ],
+      "boundary_notes": "Focuses on the end-user self-service booking and rostering tools inside the app."
+    },
+    {
+      "category_id": "UI_FRICTION_AND_MANDATORY_PROMPTS",
+      "name": "UI Friction and Mandatory Prompts",
+      "definition": "User experience degradation caused by unskippable rating requests, intrusive safety confirmation popups, notification spam, screen brightness overrides, or forced permissions.",
+      "include_when": [
+        "App blocks progression with a compulsory ride rating prompt without a skip option",
+        "Seatbelt safety check popup introduces extra clicks or obscures the OTP",
+        "Repeated unclosable notification popups blocking UI usage or SOS triggers",
+        "App demands unnecessary hardware permissions such as microphone access",
+        "App forces phone screen to full brightness without user consent"
+      ],
+      "exclude_when": [
+        "General non-specific UI complaints with no concrete symptom (NULL_REVIEWS)",
+        "Functional errors where booking buttons fail to respond due to network/backend bugs"
+      ],
+      "example_phrases": [
+        "when you click view otp it pops up the seat belt safely first",
+        "forcing me to give rating after every ride as there is no skip option",
+        "Too much pop up notification which won't close easily",
+        "forcing users to grant microphone access",
+        "Goes to full brightness the moment you choose metro ticket",
+        "why the hell no option of skip rating"
+      ],
+      "boundary_notes": "Addresses deliberate UI flows, modal prompts, and permissions that obstruct seamless application navigation."
+    },
+    {
+      "category_id": "DRIVER_CONDUCT_AND_GROUND_OPERATIONS",
+      "name": "Driver Conduct and Ground Operations",
+      "definition": "Failures related to physical transport operations, driver misbehavior, lack of professionalism, unpunctual cab arrivals, and improper no-show declarations.",
+      "include_when": [
+        "Driver exhibits rude, disrespectful, abusive, or unprofessional behavior",
+        "Driver arrives excessively late, leaves early, or drops employee before destination",
+        "Driver or transport vendor marks rider as 'No Show' without calling or waiting",
+        "Cab is not assigned by operational staff despite scheduled booking time"
+      ],
+      "exclude_when": [
+        "Complaints strictly targeting app software routing algorithms or map GPS updates",
+        "User inability to cancel booking due to missing UI buttons"
+      ],
+      "example_phrases": [
+        "Drivers are rude no professonalism",
+        "misbehaved with girl employee",
+        "dropped before location",
+        "they mark my no show for no reason",
+        "cab has to assign on 2:30 am and it's 3:30 am and still no updates",
+        "driver will come to pickup point and wait for 1 hour but won't give a short call"
+      ],
+      "boundary_notes": "Covers human operational delivery and fleet behavior on the ground rather than software application defects."
+    },
+    {
+      "category_id": "HELPDESK_AND_CUSTOMER_SUPPORT_DEFECTS",
+      "name": "Helpdesk and Customer Support Defects",
+      "definition": "Inability to reach transport customer service, unanswered or disconnecting support phone lines, and lack of complaint resolution or feedback channels.",
+      "include_when": [
+        "Helpdesk phone line disconnects automatically or goes unanswered during emergencies",
+        "App lacks an accessible customer service, feedback, or grievance escalation channel",
+        "Support personnel or transport desk refuse assistance or fail to respond to tickets"
+      ],
+      "exclude_when": [
+        "Complaints about drivers where customer support was not contacted",
+        "Complaints regarding compulsory post-ride star ratings inside the UI"
+      ],
+      "example_phrases": [
+        "not avle to connect with helpdesk",
+        "When trying to reach helpdesk the line disconnects",
+        "Customer support they are not receiving the call",
+        "no feedback option for routing and journey",
+        "transport help team doesn't help at all",
+        "no option to contact help desk"
+      ],
+      "boundary_notes": "Centers on customer service accessibility, support responsiveness, and dispute resolution channels."
+    }
+  ],
+  "cross_cutting_notes": [
+    "Update regressions: App updates (notably 12.16.x through 12.19.x) frequently triggered launch crashes, Play Store verification bugs, and degraded user workflows.",
+    "Cascading No-Show impact: Telemetry tracking lag, absent driver calls, and app scheduling errors frequently result in riders being falsely penalized with 'No Show' marks.",
+    "Safety and compliance friction: Safety-oriented UI features (mandatory seatbelt popups, forced rating gates) counterintuitively create safety risks by obscuring OTPs and impeding SOS emergency accessibility."
+  ]
+}
